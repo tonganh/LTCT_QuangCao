@@ -28,19 +28,19 @@ async function bootstrap() {
   );
 
   const options = new DocumentBuilder()
-    .setTitle('FTU IQA System API')
+    .setTitle('BASE NESTJS')
     .addBearerAuth()
-    .setDescription('API for FTU IQA System')
+    .setDescription('API FOR BASE NESTJS TNA')
     .setVersion('0.0.4')
     .build();
   const customOptions: SwaggerCustomOptions = {
     swaggerOptions: {
       persistAuthorization: true,
     },
-    customSiteTitle: 'FTU IQA API',
+    customSiteTitle: 'BASE NESTJS',
   };
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('/api/v1', app, document, customOptions);
+  SwaggerModule.setup('/api', app, document, customOptions);
 
   app.useGlobalInterceptors(new ResponseTransformInterceptor());
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
