@@ -1,0 +1,29 @@
+server:
+  port: PORT
+
+endpoint:
+  client: 'CLIENT_ENDPOINT'
+  api: 'API_ENDPOINT'
+
+db:
+  type: 'DB_TYPE'
+  port: 'DB_PORT'
+  database: 'DB_NAME'
+  host: 'DB_HOST'
+  username: 'DB_USERNAME'
+  password: 'DB_PASSWORD'
+
+jwt:
+  secret: 'JWT_SECRET'
+
+sendgrid:
+  apiKey: 'SENDGRID_API_KEY'
+
+storage:
+  endPoint: 'MINIO_ENDPOINT'
+  accessKey: 'MINIO_ACCESS_KEY'
+  secretKey: 'MINIO_SECRET_KEY'
+  bucket: 'MINIO_BUCKET'
+
+convert:
+  endPoint: 'CONVERT_ENDPOINT'

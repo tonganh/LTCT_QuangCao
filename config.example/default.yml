@@ -1,0 +1,13 @@
+server:
+  port: 3000
+
+db:
+  type: 'DB_TYPE'
+  port: 'DB_PORT'
+  database: 'DB_NAME'
+
+jwt:
+  expiresIn: '30d'
+
+sendgrid:
+  apiKey: 'SENDGRID_API_KEY'

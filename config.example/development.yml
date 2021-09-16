@@ -1,0 +1,25 @@
+db:
+  host: 'DB_HOST'
+  username: 'DB_USERNAME'
+  password: 'DB_PASSWORD'
+  synchronize: false
+  logging: true
+
+jwt:
+  secret: 'JWT_SECRET'
+
+endpoint:
+  client: 'CLIENT_ENDPOINT'
+  api: 'API_ENDPOINT'
+
+sendgrid:
+  apiKey: 'SENDGRID_API_KEY'
+
+storage:
+  endPoint: 'MINIO_ENDPOINT'
+  accessKey: 'MINIO_ACCESS_KEY'
+  secretKey: 'MINIO_SECRET_KEY'
+  bucket: 'MINIO_BUCKET'
+
+convert:
+  endPoint: 'CONVERT_ENDPOINT'
