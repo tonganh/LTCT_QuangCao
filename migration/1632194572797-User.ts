@@ -40,8 +40,7 @@ const deletedByForeignKey = new TableForeignKey({
   referencedTableName: 'users',
   referencedColumnNames: ['id'],
 });
-
-export class Entity1611304693697 implements MigrationInterface {
+export class User1632194572797 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
