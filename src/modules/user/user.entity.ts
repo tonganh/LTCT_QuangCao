@@ -1,15 +1,16 @@
-import { AbstractSoftDeleteEntity } from 'src/common/entity/abstract.entity';
-import * as bcrypt from 'bcryptjs';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { Exclude } from 'class-transformer';
-import { IsEmpty } from 'class-validator';
-import { CrudValidationGroups } from '@nestjsx/crud';
+import { AbstractSoftDeleteEntity } from "src/common/entity/abstract.entity";
+import * as bcrypt from "bcryptjs";
+import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
+import { Exclude } from "class-transformer";
+import { IsEmpty } from "class-validator";
+import { CrudValidationGroups } from "@nestjsx/crud";
+import { RoleEnum } from "./enum/user.enum";
 
 const { CREATE, UPDATE } = CrudValidationGroups;
-@Entity('users')
+@Entity("users")
 export class User extends AbstractSoftDeleteEntity {
   @Column({
-    name: 'full_name',
+    name: "full_name",
   })
   fullName: string;
 
@@ -24,42 +25,42 @@ export class User extends AbstractSoftDeleteEntity {
   password: string;
 
   @Column({
-    name: 'role_key',
+    name: "role_key",
   })
-  role: string;
+  role: RoleEnum;
 
   @Exclude()
   @Column()
   salt: string;
 
-  @IsEmpty({ groups: [CREATE, UPDATE], message: 'Không hợp lệ' })
+  @IsEmpty({ groups: [CREATE, UPDATE], message: "Không hợp lệ" })
   @Column({
-    type: 'boolean',
-    name: 'is_blocked',
+    type: "boolean",
+    name: "is_blocked",
     default: false,
   })
   isBlocked: boolean;
 
   @Exclude()
-  @IsEmpty({ groups: [CREATE, UPDATE], message: 'Không hợp lệ' })
+  @IsEmpty({ groups: [CREATE, UPDATE], message: "Không hợp lệ" })
   @Column({
-    type: 'timestamptz',
-    name: 'blocked_at',
+    type: "timestamptz",
+    name: "blocked_at",
     default: null,
   })
   blockedAt: Date;
 
   @Exclude()
-  @IsEmpty({ groups: [CREATE, UPDATE], message: 'Không hợp lệ' })
+  @IsEmpty({ groups: [CREATE, UPDATE], message: "Không hợp lệ" })
   @Column({
-    name: 'blocked_by',
+    name: "blocked_by",
     default: null,
   })
   blockedBy: number;
 
   @ManyToOne(() => User)
   @JoinColumn({
-    name: 'blocked_by',
+    name: "blocked_by",
   })
   blockedByUser: User;
 

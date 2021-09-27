@@ -1,40 +1,30 @@
-import {
-  Delete,
-  HttpCode,
-  Param,
-  Patch,
-  Query,
-  UploadedFile,
-  UseInterceptors,
-} from '@nestjs/common';
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { Delete, HttpCode, Param, Patch, Query } from "@nestjs/common";
+import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
 import {
   ApiBearerAuth,
-  ApiConsumes,
   ApiOperation,
   ApiQuery,
   ApiTags,
-} from '@nestjs/swagger';
-import { Crud, CrudController } from '@nestjsx/crud';
-import { GetUser } from '../auth/decorator/user.decorator';
-import { AdminGuard } from '../auth/guard/admin.guard';
-import { JwtAuthGuard } from '../auth/guard/jwt.guard';
-import { CreateUserDto } from './dto/create-user.dto';
+} from "@nestjs/swagger";
+import { Crud, CrudController } from "@nestjsx/crud";
+import { GetUser } from "../auth/decorator/user.decorator";
+import { AdminGuard } from "../auth/guard/admin.guard";
+import { JwtAuthGuard } from "../auth/guard/jwt.guard";
+import { CreateUserDto } from "./dto/create-user.dto";
 import {
   ChangePasswordReqDto,
   UpdateSelfUserDto,
   UpdateUseDto,
-} from './dto/update-user.dto';
-import { User } from './user.entity';
-import { UserService } from './user.service';
+} from "./dto/update-user.dto";
+import { User } from "./user.entity";
+import { UserService } from "./user.service";
 
 @Crud({
   model: {
     type: User,
   },
   routes: {
-    only: ['getManyBase', 'updateOneBase', 'getOneBase'],
+    only: ["getManyBase", "updateOneBase", "getOneBase"],
   },
   dto: {
     update: UpdateUseDto,
@@ -42,22 +32,22 @@ import { UserService } from './user.service';
 })
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
-@ApiTags('user')
-@Controller('users')
+@ApiTags("user")
+@Controller("users")
 export class UserController implements CrudController<User> {
   constructor(public service: UserService) {}
 
   @ApiOperation({
-    summary: 'Thông tin tài khoản',
+    summary: "Thông tin tài khoản",
   })
-  @Get('/profile')
+  @Get("/profile")
   async getProfile(@GetUser() user: User) {
     return await this.service.getProfile(user);
   }
 
   @UseGuards(AdminGuard)
   @ApiOperation({
-    summary: 'Tạo tài khoản',
+    summary: "Tạo tài khoản",
   })
   @Post()
   async createUser(@Body() createUserDto: CreateUserDto) {
@@ -65,30 +55,30 @@ export class UserController implements CrudController<User> {
   }
 
   @UseGuards(AdminGuard)
-  @Patch(':id/reset-password')
-  async resetUserPassword(@Param('id') id: number) {
+  @Patch(":id/reset-password")
+  async resetUserPassword(@Param("id") id: number) {
     const user = await this.service.getUserById(id);
     return await this.service.resetUserPassword(user);
   }
 
   @UseGuards(AdminGuard)
   @ApiOperation({
-    summary: 'Block tài khoản',
+    summary: "Block tài khoản",
   })
-  @Post(':id/block')
+  @Post(":id/block")
   @HttpCode(200)
-  async blockUser(@Param('id') id: number, @GetUser() admin: User) {
+  async blockUser(@Param("id") id: number, @GetUser() admin: User) {
     const user = await this.service.getUserById(id);
     return this.service.toggleBlockUser(user, admin);
   }
 
   @UseGuards(AdminGuard)
   @ApiOperation({
-    summary: 'Xoá tài khoản',
+    summary: "Xoá tài khoản",
   })
-  @Delete(':id')
+  @Delete(":id")
   @HttpCode(200)
-  async deleteUser(@Param('id') id: number, @GetUser() admin: User) {
+  async deleteUser(@Param("id") id: number, @GetUser() admin: User) {
     const user = await this.service.getUserById(id);
     return this.service.deleteUser(user, admin);
   }
@@ -96,15 +86,15 @@ export class UserController implements CrudController<User> {
   @UseGuards(AdminGuard)
   @Delete()
   @ApiOperation({
-    summary: 'Xoá nhiều tài khoản',
+    summary: "Xoá nhiều tài khoản",
   })
   @ApiQuery({
-    name: 'id',
-    type: 'integer',
+    name: "id",
+    type: "integer",
     isArray: true,
     required: true,
   })
-  async deleteMany(@Query('id') ids: number[], @GetUser() admin: User) {
+  async deleteMany(@Query("id") ids: number[], @GetUser() admin: User) {
     if (ids.length > 1) {
       return await this.service.deleteManyUser(ids, admin);
     } else {
@@ -114,23 +104,23 @@ export class UserController implements CrudController<User> {
   }
 
   @ApiOperation({
-    summary: 'Cập nhật thông tin cá nhân',
+    summary: "Cập nhật thông tin cá nhân",
   })
-  @Post('/update-self-information')
+  @Post("/update-self-information")
   async updateSeflInformation(
     @GetUser() user: User,
-    @Body() data: UpdateSelfUserDto,
+    @Body() data: UpdateSelfUserDto
   ) {
     return await this.service.updateSelftInformation(user, data);
   }
 
   @ApiOperation({
-    summary: 'Thay đổi mật khẩu',
+    summary: "Thay đổi mật khẩu",
   })
-  @Post('/change-password')
+  @Post("/change-password")
   async changePassword(
     @GetUser() user: User,
-    @Body() data: ChangePasswordReqDto,
+    @Body() data: ChangePasswordReqDto
   ) {
     return await this.service.changePassword(user, data);
   }

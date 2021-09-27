@@ -1,21 +1,20 @@
-import { ConflictException, Injectable, Logger } from '@nestjs/common';
-import { HandleError } from 'src/common/error.response';
-import { Connection, In, Repository, Not, IsNull } from 'typeorm';
-import * as faker from 'faker';
-import * as bcrypt from 'bcryptjs';
-import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './user.entity';
-import { BadRequestException } from '@nestjs/common';
-import * as _ from 'lodash';
-import { ChangePasswordReqDto, UpdateSelfUserDto } from './dto/update-user.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
+import { ConflictException, Injectable, Logger } from "@nestjs/common";
+import { HandleError } from "src/common/error.response";
+import { Connection, In, Repository } from "typeorm";
+import * as faker from "faker";
+import * as bcrypt from "bcryptjs";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { User } from "./user.entity";
+import { BadRequestException } from "@nestjs/common";
+import { ChangePasswordReqDto, UpdateSelfUserDto } from "./dto/update-user.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { TypeOrmCrudService } from "@nestjsx/crud-typeorm";
 
 @Injectable()
 export class UserService extends TypeOrmCrudService<User> {
   constructor(
     @InjectRepository(User) private userRepo: Repository<User>,
-    private connection: Connection,
+    private connection: Connection
   ) {
     super(userRepo);
   }
@@ -42,18 +41,17 @@ export class UserService extends TypeOrmCrudService<User> {
         username: createUserDto.username,
       });
       if (existedUserByUsername) {
-        throw new ConflictException('username');
+        throw new ConflictException("username");
       }
       const existedUserByEmail = await this.repo.findOne({
         email: createUserDto.email,
       });
       if (existedUserByEmail) {
-        throw new ConflictException('email');
+        throw new ConflictException("email");
       }
       const user = this.repo.create(createUserDto);
-      const password = faker.internet.password(8);
       user.salt = await bcrypt.genSalt();
-      user.password = await bcrypt.hash(password, user.salt);
+      user.password = await bcrypt.hash(createUserDto.password, user.salt);
       const savedUser = await queryRunner.manager.save(user);
       await queryRunner.commitTransaction();
       return savedUser;
@@ -72,14 +70,14 @@ export class UserService extends TypeOrmCrudService<User> {
     await queryRunner.startTransaction();
     try {
       if (!user) {
-        throw new BadRequestException('User không tồn tại');
+        throw new BadRequestException("User không tồn tại");
       }
       const password = faker.internet.password(8);
       user.password = await bcrypt.hash(password, user.salt);
       await queryRunner.manager.save(user);
       await queryRunner.commitTransaction();
       return {
-        message: 'Đã gửi Email mật khẩu mới',
+        message: "Đã gửi Email mật khẩu mới",
       };
     } catch (error) {
       this.logger.error(`resetUserPassword:${JSON.stringify(error)}`);
@@ -93,7 +91,7 @@ export class UserService extends TypeOrmCrudService<User> {
   async toggleBlockUser(user: User, admin: User) {
     try {
       if (!user) {
-        throw new BadRequestException('User không tồn tại');
+        throw new BadRequestException("User không tồn tại");
       }
       user.isBlocked = !user.isBlocked;
       user.blockedAt = user.isBlocked ? new Date() : null;
@@ -101,7 +99,7 @@ export class UserService extends TypeOrmCrudService<User> {
       await user.save();
       return {
         statusCode: 200,
-        message: user.isBlocked ? 'Block thành công' : 'Đả bỏ block User',
+        message: user.isBlocked ? "Block thành công" : "Đả bỏ block User",
       };
     } catch (error) {
       return HandleError(error);
@@ -111,17 +109,17 @@ export class UserService extends TypeOrmCrudService<User> {
   async deleteUser(user: User, admin: User) {
     try {
       if (!user) {
-        throw new BadRequestException('User không tồn tại');
+        throw new BadRequestException("User không tồn tại");
       }
       if (user.deletedAt) {
-        throw new BadRequestException('User đã bị xoá');
+        throw new BadRequestException("User đã bị xoá");
       }
       user.softRemove();
       user.deletedBy = admin.id;
       await user.save();
       return {
         statusCode: 200,
-        message: 'Xoá thành công',
+        message: "Xoá thành công",
       };
     } catch (error) {
       return HandleError(error);
@@ -138,7 +136,7 @@ export class UserService extends TypeOrmCrudService<User> {
         {
           deletedBy: admin.id,
           deletedAt: new Date(),
-        },
+        }
       );
       return {
         message: `Đã xoá ${res.affected} người dùng`,
@@ -151,7 +149,7 @@ export class UserService extends TypeOrmCrudService<User> {
 
   async updateSelftInformation(user: User, data: UpdateSelfUserDto) {
     try {
-      const { fullName, image = null } = data;
+      const { fullName } = data;
       user.fullName = fullName;
       await user.save();
       return user;

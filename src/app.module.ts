@@ -6,6 +6,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { PublicFileModule } from './modules/public-file/public-file.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeorm.config';
+import { ServiceModule } from './modules/service/service.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { typeOrmConfig } from './config/typeorm.config';
     UserModule,
     AuthModule,
     PublicFileModule,
+    ServiceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
