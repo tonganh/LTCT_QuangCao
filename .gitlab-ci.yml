@@ -1,0 +1,106 @@
+stages:
+  # - migration
+  - containerization
+  # - deploy
+
+variables:
+  REGISTRY: git.hisoft.com.vn:5050
+  CONTAINER_NAME: xetai-thuexe
+  NAME: ${REGISTRY}/xetai-thuexe/be-xetai-thuexe
+  TAG: ${CI_COMMIT_SHORT_SHA}
+
+# # migration:
+# #   stage: migration
+# #   # tags:
+# #   #   - shared-runner
+# #   image: node:lts
+# #   script:
+# #     - cp ormconfig.json.example ormconfig.json
+# #     - sed -i "s/DB_TYPE/postgres/g" ormconfig.json
+# #     - sed -i "s/DB_PORT/${DB_PORT}/g" ormconfig.json
+# #     - sed -i "s/DB_HOST/${DB_HOST}/g" ormconfig.json
+# #     - sed -i "s/DB_USERNAME/${DB_USERNAME}/g" ormconfig.json
+# #     - sed -i "s/DB_PASSWORD/${DB_PASSWORD}/g" ormconfig.json
+# #     - sed -i "s/DB_NAME/${DB_NAME}/g" ormconfig.json
+# #     - cat ormconfig.json
+# #     - npm install typeorm ts-node typescript pg reflect-metadata
+# #     - npm run typeorm migration:run
+# #   cache:
+# #     untracked: true
+# #     key: "$CI_BUILD_REF_NAME"
+# #     paths:
+# #       - node_modules/
+# #   only:
+# #     changes:
+# #       - migration/*
+# #     # refs:
+# #     #   - develop
+containerization:
+  stage: containerization
+  tags:
+    - shared-runner
+  script:
+    # Build the container image
+    - echo ${TAG}
+    # Remove all image except latest, ignore error
+    - docker login ${REGISTRY} -u ${GITLAB_USER} -p ${GITLAB_TOKEN}
+    - docker build --cache-from ${NAME}:latest -t ${NAME}:${TAG} .
+    # Push the container image to the registry
+    - docker tag ${NAME}:${TAG} ${NAME}:latest
+    # Push image
+    - docker push ${NAME}:${TAG}
+    - docker push ${NAME}:latest
+    # Remove untagged images
+    - docker images | grep "${NAME}" | grep "<none>" | awk '{print $3}' | xargs docker rmi -f || true
+  only:
+    # Build only when source change
+    changes:
+      - src/**/*
+    # refs:
+    #   - develop
+# # deploy:
+# #   stage: deploy
+# #   # tags:
+# #   #   - shared-runner
+# #   script:
+# #     # Pull latest image
+# #     - docker login ${REGISTRY} -u ${GITLAB_USER} -p ${GITLAB_PASSWORD}
+# #     - docker pull ${NAME}:latest
+# #     # Stop running container, ignore error
+# #     - docker ps -a |  grep "${CONTAINER_NAME}" | awk '{print $1}' | xargs docker rm -f || true
+# #     # Re-run container in nginx-proxy network & env variables
+# #     - docker run -d
+# #       --name=${CONTAINER_NAME}
+# #       --network="db-network"
+# #       -e PORT=80
+# #       -e CLIENT_ENDPOINT=${CLIENT_ENDPOINT}
+# #       -e API_ENDPOINT=${API_ENDPOINT}
+# #       -e DB_TYPE=postgres
+# #       -e DB_PORT=5432
+# #       -e DB_HOST=${DB_HOST}
+# #       -e DB_USERNAME=${DB_USERNAME}
+# #       -e DB_PASSWORD=${DB_PASSWORD}
+# #       -e DB_NAME=${DB_NAME}
+# #       -e SENDGRID_API_KEY=${SENDGRID_API_KEY}
+# #       -e MINIO_ENDPOINT=${MINIO_ENDPOINT}
+# #       -e MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+# #       -e MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+# #       -e MINIO_BUCKET=${MINIO_BUCKET}
+# #       -e CONVERT_ENDPOINT=${CONVERT_ENDPOINT}
+# #       -e LETSENCRYPT_HOST=${LETSENCRYPT_HOST}
+# #       -e LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+# #       -e VIRTUAL_HOST=${VIRTUAL_HOST}
+# #       -l traefik.enable=true
+# #       -l traefik.http.routers.ftu-api-http.entrypoints=web
+# #       -l traefik.http.routers.ftu-api-http.middlewares=https_redirect
+# #       -l traefik.http.routers.ftu-api-http.rule='Host(`ftu-api.2soft.top`)'
+# #       -l traefik.http.routers.ftu-api.entrypoints=websecure
+# #       -l traefik.http.routers.ftu-api.rule='Host(`ftu-api.2soft.top`)'
+# #       -l traefik.http.routers.ftu-api.tls=true
+# #       -l traefik.http.routers.ftu-api.tls.certresolver=acmeresolver
+# #       ${NAME}:latest
+# #     # Connect to bridge network
+# #     - docker ps -a |  grep "${NAME}" | awk 'NR==1{print $1}' | xargs docker network connect bridge
+# #   only:
+# #     refs:
+# #       - develop
