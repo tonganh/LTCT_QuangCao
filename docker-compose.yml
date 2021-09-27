@@ -1,0 +1,40 @@
+version: '3.3'
+networks:
+  quanly_xetai_1:
+    driver: bridge
+services:
+  api:
+    build:
+      context: .
+    image: test
+    depends_on:
+      - postgres
+    links:
+      - db:db
+    environment:
+      - DB_TYPE=postgres
+      - DB_PORT=5432
+      - DB_HOST=db
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=gzr2efGPYs
+      - DB_NAME=test
+      - MINIO_ENDPOINT=
+      - MINIO_ACCESS_KEY=
+      - MINIO_SECRET_KEY=
+      - MINIO_BUCKET=test
+    networks:
+      - quanly_xetai_1
+    ports:
+      - 3000:3000
+  db:
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: gzr2efGPYs
+      POSTGRES_DB: test
+    ports:
+      - 5433:5432
+    networks:
+      - quanly_xetai_1
+
+
