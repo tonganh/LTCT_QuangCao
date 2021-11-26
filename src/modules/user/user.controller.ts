@@ -109,7 +109,7 @@ export class UserController implements CrudController<User> {
   @Post("/update-self-information")
   async updateSeflInformation(
     @GetUser() user: User,
-    @Body() data: UpdateSelfUserDto
+    @Body() data: UpdateSelfUserDto,
   ) {
     return await this.service.updateSelftInformation(user, data);
   }
@@ -120,7 +120,7 @@ export class UserController implements CrudController<User> {
   @Post("/change-password")
   async changePassword(
     @GetUser() user: User,
-    @Body() data: ChangePasswordReqDto
+    @Body() data: ChangePasswordReqDto,
   ) {
     return await this.service.changePassword(user, data);
   }

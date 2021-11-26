@@ -1,6 +1,4 @@
-IMAGE=git.hisoft.com.vn:5050/haso/core-api
-
-
+IMAGE=lovehangga/ltct-btl
 all: build push
 
 build:

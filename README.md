@@ -45,3 +45,11 @@ make push
 ```bash
 make all
 ```
+
+```
+Quy trình chạy project:
+Setup DB postgres, cài môi trường NODEJS
+Thực hiện các thay đổi ghi phía trên. Sau đó RUN
+Vì lq 1 số vấn đề bảo mâpj nên k update all biến môi trường.
+Thanks
+```

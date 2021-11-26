@@ -1,16 +1,17 @@
 version: '3.3'
 networks:
-  quanly_xetai_1:
+  quangcao:
     driver: bridge
 services:
   api:
     build:
       context: .
-    image: test
+    image: lovehangga/ltct-btl
     depends_on:
-      - postgres
-    links:
-      - db:db
+      - db
+      # - migration
+    # links:
+    #   - db:db
     environment:
       - DB_TYPE=postgres
       - DB_PORT=5432
@@ -18,12 +19,8 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=gzr2efGPYs
       - DB_NAME=test
-      - MINIO_ENDPOINT=
-      - MINIO_ACCESS_KEY=
-      - MINIO_SECRET_KEY=
-      - MINIO_BUCKET=test
     networks:
-      - quanly_xetai_1
+      - quangcao
     ports:
       - 3000:3000
   db:
@@ -34,7 +31,12 @@ services:
       POSTGRES_DB: test
     ports:
       - 5433:5432
-    networks:
-      - quanly_xetai_1
+  # migration:
+  #   image: lovehangga/ltct-btl
+  #   command: npm typeorm migration:run
+  #   depends_on:
+  #     - db
+  #   networks:
+  #     - quangcao
 
 
