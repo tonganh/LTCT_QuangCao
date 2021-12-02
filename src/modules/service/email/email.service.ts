@@ -34,11 +34,11 @@ export class EmailService {
     subject: string,
     text: string,
     to: string,
-    data: any
+    data: any,
   ) {
     const htmlString = readFileSync(
       __dirname + `/../../resources/templates/${template}.ejs`,
-      "utf-8"
+      "utf-8",
     );
     if (!htmlString) {
       throw new BadGatewayException("Không tìm thấy template");
@@ -59,7 +59,7 @@ export class EmailService {
   async sendForgotPasswordEmail(user: User, returnUrl: string): Promise<any> {
     const dirLink = path.join(
       __dirname,
-      "../../../resources/templates/reset-password.ejs"
+      "../../../resources/templates/reset-password.ejs",
     );
     const htmlString = readFileSync(dirLink, "utf-8");
     try {
@@ -70,7 +70,7 @@ export class EmailService {
         text: `Đặt lại mật khẩu`,
         html: ejs.render(htmlString, {
           reset_url: `${returnUrl}?token=${this.tokenService.signResetPasswordToken(
-            user
+            user,
           )}`,
         }),
       });
@@ -82,7 +82,7 @@ export class EmailService {
   async sendResetPasswordEmail(user: User, password: string): Promise<any> {
     const htmlString = readFileSync(
       __dirname + "/../../resources/templates/admin-reset-user-password.ejs",
-      "utf-8"
+      "utf-8",
     );
     try {
       await this.sendGridClient.send({
@@ -94,6 +94,30 @@ export class EmailService {
           password: password,
         }),
       });
+    } catch (error) {
+      throw new BadRequestException("Có lỗi khi gửi Email reset mật khẩu");
+    }
+  }
+
+  async sendAdvertisement(usernames: string[], content: string): Promise<any> {
+    const htmlString = readFileSync(
+      __dirname + "/../../../resources/templates/advertisement.ejs",
+      "utf-8",
+    );
+    try {
+      await Promise.all(
+        usernames.map(async (username) => {
+          await this.sendGridClient.send({
+            to: username,
+            from: "info@2soft.top",
+            subject: "Thông báo về quảng cáo",
+            text: `Thông báo về quảng cáo`,
+            html: ejs.render(htmlString, {
+              content,
+            }),
+          });
+        }),
+      );
     } catch (error) {
       throw new BadRequestException("Có lỗi khi gửi Email reset mật khẩu");
     }

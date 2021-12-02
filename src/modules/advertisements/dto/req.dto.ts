@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 export class AdvertisementReqDto {
-  @ApiProperty({ default: "tong ngoc anh dep trai vl" })
+  @ApiProperty({ default: "xin chao toi den tu trai dat" })
   title: string;
   @ApiProperty({ default: "hahahasdhhasdf" })
   content: string;
@@ -21,4 +21,9 @@ export class AdvertisementReqDto {
 
   @ApiProperty({ default: "activated" })
   status: string;
+}
+
+export class ContentSendMail {
+  @ApiProperty({ default: "Tong Anh d.trai" })
+  content: string;
 }

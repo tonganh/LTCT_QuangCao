@@ -2,12 +2,12 @@ import { AuthGuard } from "@nestjs/passport";
 import { AdvertisementsService } from "./advertisements.service";
 import { Advertisement } from "./advertisment.entity";
 import { Crud, CrudController } from "@nestjsx/crud";
-import { Controller, UseGuards } from "@nestjs/common";
+import { Body, Controller, Post, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { RolesGuard } from "../auth/guard/roles.guard";
 import { Roles } from "../auth/decorator/roles.decorator";
 import { RoleEnum } from "../user/enum/user.enum";
-import { AdvertisementReqDto } from "./dto/req.dto";
+import { AdvertisementReqDto, ContentSendMail } from "./dto/req.dto";
 
 @ApiTags("Quảng cáo")
 @Controller("advertisements")
@@ -44,4 +44,9 @@ export class AdminAdvertisementsController
   implements CrudController<Advertisement>
 {
   constructor(public service: AdvertisementsService) {}
+
+  @Post("send-mail")
+  async sendMailToCustormer(@Body() req: ContentSendMail) {
+    return await this.service.sendMailToCustormer(req.content);
+  }
 }

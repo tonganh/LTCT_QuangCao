@@ -7,10 +7,11 @@ import {
   AdvertisementsController,
 } from "./advertisements.controller";
 import { AuthModule } from "../auth/auth.module";
+import { EmailModule } from "../service/email/email.module";
 
 @Module({
   providers: [AdvertisementsService],
   controllers: [AdvertisementsController, AdminAdvertisementsController],
-  imports: [TypeOrmModule.forFeature([Advertisement]), AuthModule],
+  imports: [TypeOrmModule.forFeature([Advertisement]), AuthModule, EmailModule],
 })
 export class AdvertisementsModule {}
