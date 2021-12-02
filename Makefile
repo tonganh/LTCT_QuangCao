@@ -1,4 +1,6 @@
-IMAGE=lovehangga/ltct-btl
+IMAGE=git.hisoft.com.vn:5050/anhtn/ltct
+
+
 all: build push
 
 build:

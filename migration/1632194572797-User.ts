@@ -35,11 +35,7 @@ const deletedByCol = new TableColumn({
   isNullable: true,
   default: null,
 });
-const deletedByForeignKey = new TableForeignKey({
-  columnNames: ["deleted_by"],
-  referencedTableName: "users",
-  referencedColumnNames: ["id"],
-});
+
 export class User1632194572797 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
@@ -98,15 +94,9 @@ export class User1632194572797 implements MigrationInterface {
             default: null,
             isNullable: true,
           }),
-          new TableColumn({
-            name: "blocked_by",
-            type: "integer",
-            default: null,
-            isNullable: true,
-          }),
         ],
       }),
-      true
+      true,
     );
 
     await queryRunner.createForeignKeys("users", [
@@ -114,11 +104,6 @@ export class User1632194572797 implements MigrationInterface {
         referencedTableName: "roles",
         referencedColumnNames: ["key"],
         columnNames: ["role_key"],
-      }),
-      new TableForeignKey({
-        referencedTableName: "users",
-        referencedColumnNames: ["id"],
-        columnNames: ["blocked_by"],
       }),
     ]);
   }

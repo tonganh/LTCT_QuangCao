@@ -1,42 +1,48 @@
 version: '3.3'
-networks:
-  quangcao:
-    driver: bridge
 services:
   api:
     build:
       context: .
-    image: lovehangga/ltct-btl
+    image: git.hisoft.com.vn:5050/anhtn/ltct
     depends_on:
       - db
-      # - migration
-    # links:
-    #   - db:db
+    links:
+      - db:db
     environment:
       - DB_TYPE=postgres
       - DB_PORT=5432
       - DB_HOST=db
       - DB_USERNAME=postgres
       - DB_PASSWORD=gzr2efGPYs
-      - DB_NAME=test
+      - DB_NAME=ltct
+      - SENDGRID_API_KEY=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
+      - MINIO_ENDPOINT=minio.hisoft.com.vn
+      - MINIO_ACCESS_KEY=FKjV60DxexBajLfTkpTmxBE3PGbYmEon
+      - MINIO_SECRET_KEY=7B3E7EB4F2796
+      - MINIO_BUCKET=anhtn-ltct
     networks:
-      - quangcao
+      - anhtn-ltct
     ports:
       - 3000:3000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ltct-http.entrypoints=web"
+      - "traefik.http.routers.ltct-http.rule=Host(`ltct-api.2soft.top`)"
+      - "traefik.http.routers.ltct-http.middlewares=https_redirect"
+      - "traefik.http.routers.ltct.entrypoints=websecure"
+      - "traefik.http.routers.ltct.rule=Host(`ltct-api.2soft.top`)"
+      - "traefik.http.routers.ltct.tls=true"
+      - "traefik.http.routers.ltct.tls.certresolver=acmeresolver"
   db:
     image: postgres:alpine
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: gzr2efGPYs
-      POSTGRES_DB: test
+      POSTGRES_DB: ltct
     ports:
-      - 5433:5432
-  # migration:
-  #   image: lovehangga/ltct-btl
-  #   command: npm typeorm migration:run
-  #   depends_on:
-  #     - db
-  #   networks:
-  #     - quangcao
-
-
+      - 5434:5432
+    networks:
+      - anhtn-ltct
+networks:
+  anhtn-ltct:
+    driver: bridge
