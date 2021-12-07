@@ -46,4 +46,7 @@ export class Advertisement extends AbstractEntity {
     default: null,
   })
   status: string;
+
+  @Column({ name: "access_number", default: 0, type: "integer" })
+  accessNumber: number;
 }

@@ -23,10 +23,9 @@ export class AdvertisementsService extends TypeOrmCrudService<Advertisement> {
 
   async getOneAdvertisementTest(req: CrudRequest) {
     const data = await this.base.getOne(req);
-    console.log(
-      "🚀 ~ file: advertisements.service.ts ~ line 26 ~ AdvertisementsService ~ getOneAdvertisementTest ~ data",
-      data,
-    );
+    data.accessNumber++;
+    await this.repo.save(data);
+    delete data.accessNumber;
     return data;
   }
 

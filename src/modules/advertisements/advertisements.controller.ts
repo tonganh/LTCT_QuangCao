@@ -15,7 +15,7 @@ import { Roles } from "../auth/decorator/roles.decorator";
 import { RoleEnum } from "../user/enum/user.enum";
 import { AdvertisementReqDto, ContentSendMail } from "./dto/req.dto";
 
-@ApiTags("Quảng cáo")
+@ApiTags("For all users - Quảng cáo")
 @Controller("advertisements")
 @Crud({
   model: {
@@ -34,17 +34,17 @@ export class AdvertisementsController implements CrudController<Advertisement> {
   }
 }
 
-@ApiTags("Quảng cáo")
+@ApiTags("Admin - Quảng cáo")
 @ApiBearerAuth()
 @UseGuards(AuthGuard(), RolesGuard)
 @Roles(RoleEnum.ADMIN)
-@Controller("advertisements")
+@Controller("admin/advertisements")
 @Crud({
   model: {
     type: Advertisement,
   },
   routes: {
-    exclude: ["getOneBase", "getManyBase", "replaceOneBase"],
+    exclude: ["replaceOneBase"],
   },
   dto: {
     create: AdvertisementReqDto,
