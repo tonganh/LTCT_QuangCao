@@ -21,6 +21,12 @@ export class AdvertisementReqDto {
 
   @ApiProperty({ default: "activated" })
   status: string;
+
+  @ApiProperty({ default: new Date("2021-12-08T00:00:00") })
+  startAt: Date;
+
+  @ApiProperty({ default: new Date("2021-12-08T23:59:59") })
+  endAt: Date;
 }
 
 export class ContentSendMail {
