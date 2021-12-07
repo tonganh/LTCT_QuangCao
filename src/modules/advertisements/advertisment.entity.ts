@@ -49,4 +49,10 @@ export class Advertisement extends AbstractEntity {
 
   @Column({ name: "access_number", default: 0, type: "integer" })
   accessNumber: number;
+
+  @Column({ name: "start_at", type: "timestamp" })
+  startAt: Date;
+
+  @Column({ name: "end_at", type: "timestamp" })
+  endAt: Date;
 }

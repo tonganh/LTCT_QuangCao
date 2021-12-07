@@ -30,7 +30,12 @@ export class AdvertisementsController implements CrudController<Advertisement> {
 
   @Override("getOneBase")
   async getOneAdvertisementTest(@ParsedRequest() req: CrudRequest) {
-    return this.service.getOneAdvertisementTest(req);
+    return await this.service.getOneAdvertisementTest(req);
+  }
+
+  @Override("getManyBase")
+  async getManyAdvertisementWithTime(@ParsedRequest() req: CrudRequest) {
+    return await this.service.getManyAdvertisementWithTime(req);
   }
 }
 
