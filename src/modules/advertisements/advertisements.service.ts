@@ -5,6 +5,7 @@ import { Injectable } from "@nestjs/common";
 import { Advertisement } from "./advertisment.entity";
 import { Repository } from "typeorm";
 import { EmailService } from "../service/email/email.service";
+import { CrudRequest } from "@nestjsx/crud";
 
 @Injectable()
 export class AdvertisementsService extends TypeOrmCrudService<Advertisement> {
@@ -16,7 +17,20 @@ export class AdvertisementsService extends TypeOrmCrudService<Advertisement> {
     super(repo);
   }
 
-  async sendMailToCustormer(content: string) {
+  get base(): TypeOrmCrudService<Advertisement> {
+    return this;
+  }
+
+  async getOneAdvertisementTest(req: CrudRequest) {
+    const data = await this.base.getOne(req);
+    console.log(
+      "🚀 ~ file: advertisements.service.ts ~ line 26 ~ AdvertisementsService ~ getOneAdvertisementTest ~ data",
+      data,
+    );
+    return data;
+  }
+
+  async sendMailAdvertisementToCustormer(content: string) {
     try {
       const usernames = [
         "ngocdiem5102000@gmail.com",
