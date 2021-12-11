@@ -8,9 +8,16 @@ import { Repository } from "typeorm";
 import { EmailService } from "../service/email/email.service";
 import { CrudRequest } from "@nestjsx/crud";
 import * as moment from "moment";
+interface AdvertisementInterface {
+  getOneAdvertisement(req: CrudRequest);
+  getManyAdvertisementWithTime(req: CrudRequest);
+}
 
 @Injectable()
-export class AdvertisementsService extends TypeOrmCrudService<Advertisement> {
+export class AdvertisementsService
+  extends TypeOrmCrudService<Advertisement>
+  implements AdvertisementInterface
+{
   constructor(
     @InjectRepository(Advertisement)
     public repo: Repository<Advertisement>,
@@ -24,7 +31,7 @@ export class AdvertisementsService extends TypeOrmCrudService<Advertisement> {
     return this;
   }
 
-  async getOneAdvertisementTest(req: CrudRequest) {
+  async getOneAdvertisement(req: CrudRequest): Promise<Advertisement> {
     const data = await this.base.getOne(req);
     data.accessNumber++;
     await this.repo.save(data);
