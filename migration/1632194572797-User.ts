@@ -94,6 +94,12 @@ export class User1632194572797 implements MigrationInterface {
             default: null,
             isNullable: true,
           }),
+          new TableColumn({
+            name: "blocked_by",
+            type: "integer",
+            default: null,
+            isNullable: true,
+          }),
         ],
       }),
       true,
@@ -104,6 +110,11 @@ export class User1632194572797 implements MigrationInterface {
         referencedTableName: "roles",
         referencedColumnNames: ["key"],
         columnNames: ["role_key"],
+      }),
+      new TableForeignKey({
+        referencedTableName: "users",
+        referencedColumnNames: ["id"],
+        columnNames: ["blocked_by"],
       }),
     ]);
   }

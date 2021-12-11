@@ -10,6 +10,11 @@ import { sendGridConfig } from "src/config/base.config";
 import { TokenService } from "../../auth/token.service";
 import { User } from "../../user/user.entity";
 import * as path from "path";
+
+type CustormerForMailServiceType = {
+  email: string;
+  name: string;
+};
 @Injectable()
 export class EmailService {
   constructor(private tokenService: TokenService) {
@@ -123,15 +128,18 @@ export class EmailService {
   //   }
   // }
 
-  async sendAdvertisement(usernames: string[], content: string): Promise<any> {
+  async sendAdvertisement(
+    custormesrs: CustormerForMailServiceType[],
+    content: string,
+  ): Promise<any> {
     try {
       await Promise.all(
-        usernames.map(async (username) => {
+        custormesrs.map(async (custormser) => {
           await this.send(
             "advertisement",
             "Thông báo về quảng cáo",
             "Thông báo về quảng cáo",
-            username,
+            custormser.email,
             { content },
           );
         }),

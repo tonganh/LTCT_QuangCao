@@ -1,13 +1,14 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UserModule } from './modules/user/user.module';
-import { AuthModule } from './modules/auth/auth.module';
-import { PublicFileModule } from './modules/public-file/public-file.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { typeOrmConfig } from './config/typeorm.config';
-import { ServiceModule } from './modules/service/service.module';
-import { AdvertisementsModule } from './modules/advertisements/advertisements.module';
+import { CustormersModule } from "./modules/custormers/custormers.module";
+import { Module } from "@nestjs/common";
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
+import { UserModule } from "./modules/user/user.module";
+import { AuthModule } from "./modules/auth/auth.module";
+import { PublicFileModule } from "./modules/public-file/public-file.module";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { typeOrmConfig } from "./config/typeorm.config";
+import { ServiceModule } from "./modules/service/service.module";
+import { AdvertisementsModule } from "./modules/advertisements/advertisements.module";
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AdvertisementsModule } from './modules/advertisements/advertisements.mo
     PublicFileModule,
     ServiceModule,
     AdvertisementsModule,
+    CustormersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

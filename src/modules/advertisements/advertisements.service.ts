@@ -1,3 +1,4 @@
+import { CustormersService } from "./../custormers/custormers.service";
 import { HandleError } from "src/common/error.response";
 import { InjectRepository } from "@nestjs/typeorm";
 import { TypeOrmCrudService } from "@nestjsx/crud-typeorm";
@@ -14,6 +15,7 @@ export class AdvertisementsService extends TypeOrmCrudService<Advertisement> {
     @InjectRepository(Advertisement)
     public repo: Repository<Advertisement>,
     public emailService: EmailService,
+    public custormerService: CustormersService,
   ) {
     super(repo);
   }
@@ -63,13 +65,9 @@ export class AdvertisementsService extends TypeOrmCrudService<Advertisement> {
 
   async sendMailAdvertisementToCustormer(content: string) {
     try {
-      const usernames = [
-        "ngocdiem5102000@gmail.com",
-        "anhbum2000@gmail.com",
-        "haiprovip1102@gmail.com",
-        "tongngocanhcampha@gmail.com",
-      ];
-      await this.emailService.sendAdvertisement(usernames, content);
+      const custormers =
+        await this.custormerService.getListWantReceiveAdvertisement();
+      await this.emailService.sendAdvertisement(custormers, content);
       return { message: "Successfull" };
     } catch (error) {
       HandleError(error);

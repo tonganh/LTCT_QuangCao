@@ -1,6 +1,6 @@
 echo "Generating module"
-nest g module $1 --no-spec
+nest g module modules/$1 --no-spec
 echo "Generating controller"
-nest g controller $1 --no-spec
+nest g controller modules/$1 --no-spec
 echo "Generating service"
-nest g service $1 --no-spec
+nest g service modules/$1 --no-spec

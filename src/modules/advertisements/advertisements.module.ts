@@ -1,3 +1,4 @@
+import { CustormersModule } from "./../custormers/custormers.module";
 import { Advertisement } from "./advertisment.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Module } from "@nestjs/common";
@@ -12,6 +13,11 @@ import { EmailModule } from "../service/email/email.module";
 @Module({
   providers: [AdvertisementsService],
   controllers: [AdvertisementsController, AdminAdvertisementsController],
-  imports: [TypeOrmModule.forFeature([Advertisement]), AuthModule, EmailModule],
+  imports: [
+    TypeOrmModule.forFeature([Advertisement]),
+    AuthModule,
+    EmailModule,
+    CustormersModule,
+  ],
 })
 export class AdvertisementsModule {}
