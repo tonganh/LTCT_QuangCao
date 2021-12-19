@@ -9,6 +9,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { typeOrmConfig } from "./config/typeorm.config";
 import { ServiceModule } from "./modules/service/service.module";
 import { AdvertisementsModule } from "./modules/advertisements/advertisements.module";
+import { NotificationsModule } from './modules/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AdvertisementsModule } from "./modules/advertisements/advertisements.mo
     ServiceModule,
     AdvertisementsModule,
     CustormersModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
