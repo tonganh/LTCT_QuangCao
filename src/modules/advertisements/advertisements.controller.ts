@@ -24,9 +24,12 @@ import { AdvertisementReqDto, ContentSendMail } from "./dto/req.dto";
   routes: {
     only: ["getOneBase", "getManyBase"],
   },
+  query: {
+    exclude: ["accessNumber"]
+  }
 })
 export class AdvertisementsController implements CrudController<Advertisement> {
-  constructor(public service: AdvertisementsService) {}
+  constructor(public service: AdvertisementsService) { }
 
   @Override("getOneBase")
   async getOneAdvertisementTest(@ParsedRequest() req: CrudRequest) {
@@ -59,7 +62,7 @@ export class AdvertisementsController implements CrudController<Advertisement> {
 export class AdminAdvertisementsController
   implements CrudController<Advertisement>
 {
-  constructor(public service: AdvertisementsService) {}
+  constructor(public service: AdvertisementsService) { }
 
   @Post("send-mail")
   async sendMailToCustormer(@Body() req: ContentSendMail) {
