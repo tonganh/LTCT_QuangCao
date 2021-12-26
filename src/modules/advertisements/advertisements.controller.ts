@@ -24,9 +24,6 @@ import { AdvertisementReqDto, ContentSendMail } from "./dto/req.dto";
   routes: {
     only: ["getOneBase", "getManyBase"],
   },
-  query: {
-    exclude: ["accessNumber"]
-  }
 })
 export class AdvertisementsController implements CrudController<Advertisement> {
   constructor(public service: AdvertisementsService) { }

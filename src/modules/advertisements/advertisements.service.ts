@@ -16,8 +16,7 @@ interface AdvertisementInterface {
 @Injectable()
 export class AdvertisementsService
   extends TypeOrmCrudService<Advertisement>
-  implements AdvertisementInterface
-{
+  implements AdvertisementInterface {
   constructor(
     @InjectRepository(Advertisement)
     public repo: Repository<Advertisement>,
@@ -74,6 +73,8 @@ export class AdvertisementsService
     try {
       const custormers =
         await this.custormerService.getListWantReceiveAdvertisement();
+
+      console.log("🚀 ~ file: advertisements.service.ts ~ line 75 ~ sendMailAdvertisementToCustormer ~ custormers", custormers)
       await this.emailService.sendAdvertisement(custormers, content);
       return { message: "Successfull" };
     } catch (error) {
