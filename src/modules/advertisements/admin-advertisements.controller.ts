@@ -1,12 +1,9 @@
 import { AuthGuard } from "@nestjs/passport";
-import { AdvertisementsService } from "./advertisements.service";
+import { AdminAdvertisementsService } from "./advertisements.service";
 import { Advertisement } from "./advertisment.entity";
 import {
   Crud,
   CrudController,
-  CrudRequest,
-  Override,
-  ParsedRequest,
 } from "@nestjsx/crud";
 import { Body, Controller, Post, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
@@ -15,29 +12,6 @@ import { Roles } from "../auth/decorator/roles.decorator";
 import { RoleEnum } from "../user/enum/user.enum";
 import { AdvertisementReqDto, ContentSendMail } from "./dto/req.dto";
 
-@ApiTags("For all users - Quảng cáo")
-@Controller("advertisements")
-@Crud({
-  model: {
-    type: Advertisement,
-  },
-  routes: {
-    only: ["getOneBase", "getManyBase"],
-  },
-})
-export class AdvertisementsController implements CrudController<Advertisement> {
-  constructor(public service: AdvertisementsService) { }
-
-  @Override("getOneBase")
-  async getOneAdvertisementTest(@ParsedRequest() req: CrudRequest) {
-    return await this.service.getOneAdvertisement(req);
-  }
-
-  @Override("getManyBase")
-  async getManyAdvertisementWithTime(@ParsedRequest() req: CrudRequest) {
-    return await this.service.getManyAdvertisementWithTime(req);
-  }
-}
 
 @ApiTags("Admin - Quảng cáo")
 @ApiBearerAuth()
@@ -59,7 +33,7 @@ export class AdvertisementsController implements CrudController<Advertisement> {
 export class AdminAdvertisementsController
   implements CrudController<Advertisement>
 {
-  constructor(public service: AdvertisementsService) { }
+  constructor(public service: AdminAdvertisementsService) { }
 
   @Post("send-mail")
   async sendMailToCustormer(@Body() req: ContentSendMail) {
