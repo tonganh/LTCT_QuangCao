@@ -4,6 +4,7 @@ import { Advertisement } from "./advertisment.entity";
 import {
   Crud,
   CrudController,
+  Override,
 } from "@nestjsx/crud";
 import { Body, Controller, Post, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
@@ -26,7 +27,6 @@ import { AdvertisementReqDto, ContentSendMail } from "./dto/req.dto";
     exclude: ["replaceOneBase"],
   },
   dto: {
-    create: AdvertisementReqDto,
     update: AdvertisementReqDto,
   },
 })
@@ -34,6 +34,11 @@ export class AdminAdvertisementsController
   implements CrudController<Advertisement>
 {
   constructor(public service: AdminAdvertisementsService) { }
+
+  @Override("createOneBase")
+  async adminCreateAdvertisement(@Body() req: AdvertisementReqDto) {
+    return await this.service.createAnAdvertisement(req)
+  }
 
   @Post("send-mail")
   async sendMailToCustormer(@Body() req: ContentSendMail) {

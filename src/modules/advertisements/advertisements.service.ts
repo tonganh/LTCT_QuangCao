@@ -7,6 +7,8 @@ import { Advertisement } from "./advertisment.entity";
 import { Repository } from "typeorm";
 import { EmailService } from "../service/email/email.service";
 import * as moment from "moment";
+import { HttpService } from "@nestjs/axios";
+import { AdvertisementReqDto } from "./dto/req.dto";
 interface AdminAdvertisementInterface {
   sendMailAdvertisementToCustormer(content: string): any
 }
@@ -18,6 +20,7 @@ export class AdminAdvertisementsService
     public repo: Repository<Advertisement>,
     public emailService: EmailService,
     public custormerService: CustormersService,
+    private httpService: HttpService
   ) {
     super(repo);
   }
@@ -32,6 +35,24 @@ export class AdminAdvertisementsService
       "DD-MM-YYYY hh:mm:ss",
     ).format("YYYY-MM-DD HH:mm:ss");
     return fromDate;
+  }
+
+  async createAnAdvertisement(req: AdvertisementReqDto) {
+    try {
+      const { productId = "" } = req
+      if (productId !== "") {
+        const productData = await this.httpService.get(`https://laptrinhcautrucapi.herokuapp.com/product/id?id=${parseInt(productId)}`).toPromise()
+        if (productData.status === 200) {
+          const productDataUsing: { id: number; name: string; type: string; description: string; image: string } = productData.data[0]
+          req.content = productDataUsing.description
+          req.imageUrl = productDataUsing.image
+        }
+      }
+      const advertisementCreate = this.repo.create(req)
+      return await this.repo.save(advertisementCreate)
+    } catch (error) {
+      HandleError(error)
+    }
   }
 
   async sendMailAdvertisementToCustormer(content: string) {

@@ -1,12 +1,16 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { IsString } from "class-validator";
 export class AdvertisementReqDto {
   @ApiProperty({ default: "xin chao toi den tu trai dat" })
+  @IsString()
   title: string;
   @ApiProperty({ default: "hahahasdhhasdf" })
+  @IsString()
   content: string;
   @ApiProperty({ default: "https://www.facebook.com/chemistryismylove/" })
+  @IsString()
   advertismentUrl: string;
-  @ApiProperty({
+  @ApiPropertyOptional({
     default:
       "https://minio.hisoft.com.vn/qr-scan/214341604_2237957043012540_977929668598209155_n.jpg",
   })
@@ -27,6 +31,9 @@ export class AdvertisementReqDto {
 
   @ApiProperty({ default: new Date("2021-12-08T23:59:59") })
   endAt: Date;
+
+  @ApiPropertyOptional({ default: "124123", description: "ID của sản phẩm muốn lấy thông tin cho vào quảng cáo." })
+  productId: string
 }
 
 export class ContentSendMail {

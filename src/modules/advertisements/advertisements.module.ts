@@ -10,7 +10,7 @@ import { AuthModule } from "../auth/auth.module";
 import { EmailModule } from "../service/email/email.module";
 import { UserAdvertisementsController } from "./user-advertisement.controller";
 import { UserAdvertisementsService } from "./user-advertisement.service";
-import { UserAdvertisementAbtractService } from "./abtract/user-advertisement-abtract.service";
+import { HttpModule } from "@nestjs/axios";
 
 @Module({
   providers: [AdminAdvertisementsService, UserAdvertisementsService],
@@ -20,6 +20,7 @@ import { UserAdvertisementAbtractService } from "./abtract/user-advertisement-ab
     AuthModule,
     EmailModule,
     CustormersModule,
+    HttpModule
   ],
 })
 export class AdvertisementsModule { }
