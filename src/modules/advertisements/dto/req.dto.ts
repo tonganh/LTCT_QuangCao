@@ -34,6 +34,9 @@ export class AdvertisementReqDto {
 
   @ApiPropertyOptional({ default: "124123", description: "ID của sản phẩm muốn lấy thông tin cho vào quảng cáo." })
   productId: string
+
+  @ApiPropertyOptional({ default: "61bef970aae2b6ad1b62fc59", description: "ID khuyến mãi muốn quảng cáo" })
+  saleId: string
 }
 
 export class ContentSendMail {

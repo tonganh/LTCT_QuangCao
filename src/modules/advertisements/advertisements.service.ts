@@ -39,13 +39,20 @@ export class AdminAdvertisementsService
 
   async createAnAdvertisement(req: AdvertisementReqDto) {
     try {
-      const { productId = "" } = req
+      const { productId = "", saleId = "" } = req
       if (productId !== "") {
         const productData = await this.httpService.get(`https://laptrinhcautrucapi.herokuapp.com/product/id?id=${parseInt(productId)}`).toPromise()
         if (productData.status === 200) {
           const productDataUsing: { id: number; name: string; type: string; description: string; image: string } = productData.data[0]
           req.content = productDataUsing.description
           req.imageUrl = productDataUsing.image
+        }
+      }
+      if (saleId !== "") {
+        const saleData = await this.httpService.get(`https://ltct-sp19-api.herokuapp.com/api/sale/code/${saleId}`).toPromise()
+        if (saleData.status === 200) {
+          const codeDataUsing: { code: any } = saleData.data
+          req.content = codeDataUsing.code.description
         }
       }
       const advertisementCreate = this.repo.create(req)
