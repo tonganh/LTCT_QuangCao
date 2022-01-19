@@ -58,7 +58,7 @@ export class UserAdvertisementsService
             const { parsed, options } = req;
             let builder = await this.createBuilder(parsed, options);
             builder
-                .where(`${this.alias}.startAt <= :fromDate`, {
+                .andWhere(`${this.alias}.startAt <= :fromDate`, {
                     fromDate: this.currentDate,
                 })
                 .andWhere(`${this.alias}.endAt >= :toDate`, {

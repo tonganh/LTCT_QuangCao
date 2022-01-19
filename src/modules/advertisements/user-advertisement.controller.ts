@@ -5,7 +5,6 @@ import { Advertisement } from "./advertisment.entity";
 import { UserAdvertisementsService } from "./user-advertisement.service";
 
 @ApiTags("For all users - Quảng cáo")
-@Controller("advertisements")
 @Crud({
     model: {
         type: Advertisement,
@@ -13,7 +12,15 @@ import { UserAdvertisementsService } from "./user-advertisement.service";
     routes: {
         only: ["getOneBase", "getManyBase"],
     },
+    query: {
+        filter: [{
+            field: "status",
+            operator: "$eq",
+            value: "activated"
+        }]
+    }
 })
+@Controller("advertisements")
 export class UserAdvertisementsController implements CrudController<Advertisement> {
     constructor(public service: UserAdvertisementsService) { }
     @Override("getOneBase")
