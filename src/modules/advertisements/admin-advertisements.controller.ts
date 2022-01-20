@@ -1,4 +1,3 @@
-import { AuthGuard } from "@nestjs/passport";
 import { AdminAdvertisementsService } from "./advertisements.service";
 import { Advertisement } from "./advertisment.entity";
 import {
@@ -6,17 +5,14 @@ import {
   CrudController,
   Override,
 } from "@nestjsx/crud";
-import { Body, Controller, Post, UseGuards } from "@nestjs/common";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
-import { RolesGuard } from "../auth/guard/roles.guard";
+import { Body, Controller, Post } from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 import { Roles } from "../auth/decorator/roles.decorator";
 import { RoleEnum } from "../user/enum/user.enum";
 import { AdvertisementReqDto, ContentSendMail } from "./dto/req.dto";
 
 
 @ApiTags("Admin - Quảng cáo")
-@ApiBearerAuth()
-@UseGuards(AuthGuard(), RolesGuard)
 @Roles(RoleEnum.ADMIN)
 @Controller("admin/advertisements")
 @Crud({
