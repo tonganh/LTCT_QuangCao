@@ -5,8 +5,8 @@ import {
   CrudController,
   Override,
 } from "@nestjsx/crud";
-import { Body, Controller, Post } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Get, Post } from "@nestjs/common";
+import { ApiConsumes, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { Roles } from "../auth/decorator/roles.decorator";
 import { RoleEnum } from "../user/enum/user.enum";
 import { AdvertisementReqDto, ContentSendMail } from "./dto/req.dto";
@@ -39,5 +39,11 @@ export class AdminAdvertisementsController
   @Post("send-mail")
   async sendMailToCustormer(@Body() req: ContentSendMail) {
     return await this.service.sendMailAdvertisementToCustormer(req.content);
+  }
+
+  @Get("list-type")
+  @ApiOperation({description:"Lấy danh sách các loại quảng cáo"})
+  async getListTypeAdvertisement(){
+    return this.service.getListTypeAdvertisement()
   }
 }

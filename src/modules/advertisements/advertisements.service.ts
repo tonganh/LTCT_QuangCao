@@ -9,6 +9,7 @@ import { EmailService } from "../service/email/email.service";
 import * as moment from "moment";
 import { HttpService } from "@nestjs/axios";
 import { AdvertisementReqDto } from "./dto/req.dto";
+import { AdvertisementType } from "./interface/advertisement.type";
 interface AdminAdvertisementInterface {
   sendMailAdvertisementToCustormer(content: string): any
 }
@@ -58,6 +59,8 @@ export class AdminAdvertisementsService
       const advertisementCreate = this.repo.create(req)
       return await this.repo.save(advertisementCreate)
     } catch (error) {
+      error.message="Sản phẩm hoặc mã khuyến mại không tồn tại"
+      error.status=404
       HandleError(error)
     }
   }
@@ -70,6 +73,15 @@ export class AdminAdvertisementsService
       return { message: "Successfull" };
     } catch (error) {
       HandleError(error);
+    }
+  }
+
+  async getListTypeAdvertisement(){
+    try {
+      const listData = Object.values(AdvertisementType)
+      return listData
+    } catch (error) {
+      HandleError(error)
     }
   }
 }
